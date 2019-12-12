@@ -1,1 +1,1 @@
-# gitExample
+# js helper with jquery
