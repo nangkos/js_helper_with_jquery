@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>테스트</title>
+</head>
+<body>
+  <script id="tmpl-result__body" type="text/x-handlebars-template">
+    <tbody>
+    {{#if rows}}
+      {{#rows}}
+      <div>{{ comma value }}</div>
+      {{/rows}}
+    {{else}}
+    {{/if}}
+    </tbody>
+  </script>
+  <script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+  <script src="../js/vendor/handlebars-v4.5.3.js"></script>
+  <script src="../src/jquery.dw.common.js"></script>
+  <script src="../src/jquery.dw.timer.js"></script>
+  <script src="../src/jquery.dw.remote.js"></script>
+  <script src="../src/jquery.dw.template.js"></script>
+  <script src="../src/jquery.dw.ui.message.js"></script>
+  <script>
+  (function ($) {
+    var _timer = dw.timer(300)
+    var _remote = dw.remote('../js/vendor/')
+    _timer.start()
+    $.when(dw.ui.confirm('<b>confirm</b>'))
+      .then(function (payload) {
+        console.log(payload)
+        _timer.stop()
+      })
+      .then(function () {
+        return _remote && _remote.get('handlebars-v4.5.3.js')
+      })
+      .then(function (html) {
+        var _template = dw.template.tmpl('#tmpl-')('result__body')
+        console.log(_template({ rows: [{ value: '100,123.24' }, { value: 123456 }]}))
+      })
+    
+  })(jQuery)
+  </script>
+</body>
+</html>
