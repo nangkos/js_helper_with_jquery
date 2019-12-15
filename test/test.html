@@ -5,8 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>테스트</title>
+  <style>
+    .hidden {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+    }
+  </style>
 </head>
 <body>
+  <span>파일이름</span>
+  <label><input type="file" id="dw-file" class="hidden">파일선택</label>
   <script id="tmpl-result__body" type="text/x-handlebars-template">
     <tbody>
     {{#if rows}}
@@ -21,7 +32,7 @@
   src="https://code.jquery.com/jquery-1.12.4.min.js"
   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
   crossorigin="anonymous"></script>
-  <script src="../js/vendor/handlebars-v4.5.3.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.5.3/handlebars.js"></script>
   <script src="../src/jquery.dw.common.js"></script>
   <script src="../src/jquery.dw.timer.js"></script>
   <script src="../src/jquery.dw.remote.js"></script>
@@ -30,22 +41,54 @@
   <script>
   (function ($) {
     var _timer = dw.timer(300)
-    var _remote = dw.remote('../js/vendor/')
+    var _remote = dw.remote()//dw.remote('../src/')
     _timer.start()
     $.when(dw.ui.confirm('<b>confirm</b>'))
       .then(function (payload) {
         console.log(payload)
-        _timer.stop()
       })
       .then(function () {
-        return _remote && _remote.get('handlebars-v4.5.3.js')
+        console.log(_timer.getInterval())
+        //return _remote && _remote.get('jquery.dw.template.js')
+        return _remote && _remote.get('https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.5.3/handlebars.js')
       })
       .then(function (html) {
+        console.log(html)
         var _template = dw.template.tmpl('#tmpl-')('result__body')
-        console.log(_template({ rows: [{ value: '100,123.24' }, { value: 123456 }]}))
+        var __dfd = $.Deferred()
+        setTimeout(function () {
+          console.log(_template({ rows: [{ value: '100,123.24' }, { value: 123456 }]}))
+          __dfd.resolve(true)
+        }, 1000 * 2)
+        return __dfd.promise()
+      })
+      .then(function () {
+        console.log(_timer.getInterval())
+        return dw.ui.alert('<b>alert</b>')
+      })
+      .then(function (payload) {
+        console.log(payload, _timer.getInterval())
+      })
+      .then(function () {
+        _timer.stop()
+      })
+      .fail(function (e) {
+        console.log(e)
       })
     
   })(jQuery)
+  </script>
+
+  <script>
+  (function () {
+    var fileElement = document.querySelector('#dw-file')
+    fileElement.addEventListener('change', handleFiles, false)
+
+    function handleFiles () {
+      var fileList = this.files
+      console.log(fileList)
+    }
+  })()
   </script>
 </body>
 </html>

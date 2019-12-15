@@ -22,7 +22,7 @@ if (typeof jQuery === 'undefined') {
     })()
   }
 
-  dw.ui.message = function (btns, tmpl, interval) {
+  dw.ui.message = function (btns, tmpl) {
     var _tmpl = '' +
     '<div class="alert{{#if classes}} {{ classes }}{{/if}}" role="alert">' +
     '<div class="body">' +
@@ -34,7 +34,6 @@ if (typeof jQuery === 'undefined') {
       '</div>' +
     '</div></div>'
     var _template = dw.template.render(tmpl || _tmpl)
-    var _interval = interval || dw.ui.interval
     return function (msg, classes) {
       var _dfd = $.Deferred()
       var _message = $(_template({
